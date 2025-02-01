@@ -67,7 +67,7 @@ def check_date():
 # Setup the main window
 root = tk.Tk()
 root.title("AI Model Usage Manager")
-root.geometry("500x400")  # Increased resolution
+root.geometry("400x300")  # Increased resolution
 
 # Load the usage data from the JSON file
 data = load_usage()
