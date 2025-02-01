@@ -49,6 +49,21 @@ def use_model(model_key):
     else:
         messagebox.showwarning("Warning", f"Daily usage limit exceeded for {model_key} model!")
 
+def check_date():
+    """Check the current date periodically and reset usage if needed."""
+    global data
+    current_date = datetime.today().strftime("%Y-%m-%d")
+    if data.get("date") != current_date:
+        data = {
+            "date": current_date,
+            "o1": DAILY_LIMIT,
+            "o3": DAILY_LIMIT,
+        }
+        save_usage(data)
+        update_labels()
+    # Check again after 60 seconds (60000 milliseconds)
+    root.after(60000, check_date)
+
 # Setup the main window
 root = tk.Tk()
 root.title("AI Model Usage Manager")
@@ -68,5 +83,8 @@ label_o3 = tk.Label(root, text=f"o3-mini(high): {data['o3']} uses remaining", fo
 label_o3.pack(pady=20)
 button_o3 = tk.Button(root, text="Use o3-mini(high)", font=("Arial", 16), command=lambda: use_model("o3"))
 button_o3.pack(pady=10)
+
+# Start the periodic date check
+root.after(60000, check_date)
 
 root.mainloop()
